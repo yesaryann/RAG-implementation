@@ -1,5 +1,6 @@
 //PDF KO LOAD KARO
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
+import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
 
 
 async function indexDocuments() {
@@ -8,7 +9,16 @@ async function indexDocuments() {
     const rawDocs = await pdfLoader.load();
 
     console.log(rawDocs.length);
-    // Further processing of rawDocs can be done here
+
+    //chuncking karo
+
+    const textSplitter = new RecursiveCharacterTextSplitter({
+        chunkSize: 1000,
+        chunkOverlap: 200,
+    });
+
+    const chunkedDocs = await textSplitter.splitDocuments(rawDocs);
+    console.log(chunkedDocs);
 }
 
 indexDocuments();
